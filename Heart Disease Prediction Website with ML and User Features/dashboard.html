@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartCare AI - Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="enhancements.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>HeartCare AI</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#dashboard" data-section="dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#prediction" data-section="prediction">
+                            <i class="fas fa-brain"></i>
+                            <span>Heart Prediction</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#history" data-section="history">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#about" data-section="about">
+                            <i class="fas fa-info-circle"></i>
+                            <span>About</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#profile" data-section="profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title">Dashboard</h1>
+                </div>
+                
+                <div class="header-right">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <span class="user-name" id="userName">Loading...</span>
+                            <span class="user-role">Patient</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="content-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Total Predictions</h3>
+                                <p class="stat-number" id="totalPredictions">0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Risk Level</h3>
+                                <p class="stat-number" id="riskLevel">Low</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Last Check</h3>
+                                <p class="stat-number" id="lastCheck">Never</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>Accuracy</h3>
+                                <p class="stat-number">95.2%</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Quick Prediction</h3>
+                            <p>Get an instant heart disease risk assessment</p>
+                            <button class="btn-primary" onclick="navigateToSection('prediction')">
+                                Start Prediction
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="dashboard-card">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-list" id="recentActivity">
+                                <p class="no-activity">No recent activity</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Prediction Section -->
+                <section id="prediction-section" class="content-section">
+                    <div class="prediction-container">
+                        <div class="prediction-header">
+                            <h2>Heart Disease Risk Assessment</h2>
+                            <p>Please provide accurate information for the best prediction results</p>
+                        </div>
+                        
+                        <form id="predictionForm" class="prediction-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <input type="number" id="age" min="1" max="120" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sex">Sex</label>
+                                    <select id="sex" required>
+                                        <option value="">Select</option>
+                                        <option value="1">Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="cp">Chest Pain Type</label>
+                                    <select id="cp" required>
+                                        <option value="">Select</option>
+                                        <option value="0">Typical Angina</option>
+                                        <option value="1">Atypical Angina</option>
+                                        <option value="2">Non-Anginal Pain</option>
+                                        <option value="3">Asymptomatic</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="trestbps">Resting Blood Pressure (mm Hg)</label>
+                                    <input type="number" id="trestbps" min="80" max="200" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="chol">Cholesterol (mg/dl)</label>
+                                    <input type="number" id="chol" min="100" max="600" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="fbs">Fasting Blood Sugar > 120 mg/dl</label>
+                                    <select id="fbs" required>
+                                        <option value="">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="restecg">Resting ECG Results</label>
+                                    <select id="restecg" required>
+                                        <option value="">Select</option>
+                                        <option value="0">Normal</option>
+                                        <option value="1">ST-T Wave Abnormality</option>
+                                        <option value="2">Left Ventricular Hypertrophy</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="thalach">Maximum Heart Rate Achieved</label>
+                                    <input type="number" id="thalach" min="60" max="220" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="exang">Exercise Induced Angina</label>
+                                    <select id="exang" required>
+                                        <option value="">Select</option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="oldpeak">ST Depression</label>
+                                    <input type="number" id="oldpeak" step="0.1" min="0" max="10" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="slope">Slope of Peak Exercise ST Segment</label>
+                                    <select id="slope" required>
+                                        <option value="">Select</option>
+                                        <option value="0">Upsloping</option>
+                                        <option value="1">Flat</option>
+                                        <option value="2">Downsloping</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ca">Number of Major Vessels (0-3)</label>
+                                    <select id="ca" required>
+                                        <option value="">Select</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="thal">Thalassemia</label>
+                                    <select id="thal" required>
+                                        <option value="">Select</option>
+                                        <option value="1">Normal</option>
+                                        <option value="2">Fixed Defect</option>
+                                        <option value="3">Reversible Defect</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    <span>Predict Risk</span>
+                                    <i class="fas fa-brain"></i>
+                                </button>
+                                <button type="button" class="btn-secondary" onclick="resetForm()">
+                                    <span>Reset Form</span>
+                                    <i class="fas fa-redo"></i>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div id="predictionResult" class="prediction-result" style="display: none;">
+                            <div class="result-header">
+                                <h3>Prediction Result</h3>
+                            </div>
+                            <div class="result-content">
+                                <div class="result-icon">
+                                    <i class="fas fa-heartbeat"></i>
+                                </div>
+                                <div class="result-text">
+                                    <h4 id="resultTitle">Risk Assessment</h4>
+                                    <p id="resultDescription">Your heart disease risk assessment result</p>
+                                    <div class="result-confidence">
+                                        <span>Confidence: <strong id="resultConfidence">95%</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result-actions">
+                                <button class="btn-primary" onclick="savePrediction()">
+                                    Save Result
+                                </button>
+                                <button class="btn-secondary" onclick="newPrediction()">
+                                    New Prediction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Section -->
+                <section id="history-section" class="content-section">
+                    <div class="history-container">
+                        <div class="history-header">
+                            <h2>Prediction History</h2>
+                            <p>View your previous heart disease risk assessments</p>
+                        </div>
+                        
+                        <div class="history-list" id="historyList">
+                            <div class="no-history">
+                                <i class="fas fa-history"></i>
+                                <h3>No Predictions Yet</h3>
+                                <p>Start your first heart disease risk assessment to see your history here.</p>
+                                <button class="btn-primary" onclick="navigateToSection('prediction')">
+                                    Start Prediction
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- About Section -->
+                <section id="about-section" class="content-section">
+                    <div class="about-container">
+                        <div class="about-header">
+                            <h2>About HeartCare AI</h2>
+                            <p>Advanced AI-powered heart disease prediction system</p>
+                        </div>
+                        
+                        <div class="about-content">
+                            <div class="about-card">
+                                <div class="about-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <h3>Machine Learning Technology</h3>
+                                <p>Our system uses advanced machine learning algorithms trained on comprehensive medical datasets to provide accurate heart disease risk predictions.</p>
+                            </div>
+                            
+                            <div class="about-card">
+                                <div class="about-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <h3>Privacy & Security</h3>
+                                <p>Your health data is completely secure and private. All predictions are processed locally, ensuring your sensitive information never leaves your device.</p>
+                            </div>
+                            
+                            <div class="about-card">
+                                <div class="about-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3>High Accuracy</h3>
+                                <p>Our model achieves 95.2% accuracy in heart disease prediction, validated against clinical datasets and real-world medical scenarios.</p>
+                            </div>
+                            
+                            <div class="about-card">
+                                <div class="about-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <h3>Medical Guidance</h3>
+                                <p>While our AI provides valuable insights, always consult with healthcare professionals for proper medical diagnosis and treatment decisions.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="disclaimer">
+                            <h4>Important Disclaimer</h4>
+                            <p>This tool is for educational and informational purposes only. It is not intended to replace professional medical advice, diagnosis, or treatment. Always seek the advice of qualified healthcare providers with any questions regarding your health condition.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile-section" class="content-section">
+                    <div class="profile-container">
+                        <div class="profile-header">
+                            <h2>User Profile</h2>
+                            <p>Manage your account information</p>
+                        </div>
+                        
+                        <form id="profileForm" class="profile-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="profileFirstName">First Name</label>
+                                    <input type="text" id="profileFirstName" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profileLastName">Last Name</label>
+                                    <input type="text" id="profileLastName" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profileEmail">Email</label>
+                                    <input type="email" id="profileEmail" required readonly>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profilePhone">Phone</label>
+                                    <input type="tel" id="profilePhone" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    Update Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-toggle" onclick="toggleChatbot()">
+            <i class="fas fa-comments"></i>
+        </div>
+        
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <h4>Health Assistant</h4>
+                <button class="chatbot-close" onclick="toggleChatbot()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your health assistant. I can help you with general health information and answer questions about heart health. How can I assist you today?</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message...">
+                <button onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
